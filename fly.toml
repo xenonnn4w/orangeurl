@@ -1,9 +1,9 @@
 app = "orangeurl"
-primary_region = "iad"
+primary_region = "bom"
 
 [build]
-  dockerfile = "api/Dockerfile"
   context = "api"
+  dockerfile = "Dockerfile"
 
 [env]
   APP_PORT = ":3000"
