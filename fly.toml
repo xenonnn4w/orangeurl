@@ -1,0 +1,15 @@
+app = "orangeurl"
+primary_region = "iad"
+
+[build]
+  dockerfile = "api/Dockerfile"
+  context = "api"
+
+[env]
+  APP_PORT = ":3000"
+  DOMAIN = "https://orangeurl.fly.dev"
+  API_QUOTA = "10"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
