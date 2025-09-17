@@ -1,0 +1,22 @@
+version: "7"
+
+services:
+  api:
+    environment:
+      - APP_PORT=:3000
+      - DOMAIN=http://localhost:3000
+      - API_QUOTA=10
+      - DB_ADDR=db:6379
+      - DB_PASS=
+    build: api
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - db
+
+  db:
+    build: db
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
