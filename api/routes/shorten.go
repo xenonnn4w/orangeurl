@@ -3,6 +3,7 @@ package routes
 import (
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -125,7 +126,21 @@ func ShortenURL(c *fiber.Ctx) error {
 	ttl, _ := r2.TTL(database.Ctx, c.IP()).Result()
 	resp.XRateLimitReset = ttl / time.Nanosecond / time.Minute
 
-	resp.CustomShort = os.Getenv("DOMAIN") + "/" + id
+	// Generate short URL using PUBLIC_HOST or fallback to DOMAIN
+	host := os.Getenv("PUBLIC_HOST")
+	if host == "" {
+		host = os.Getenv("DOMAIN")
+	}
+	if host == "" {
+		host = "localhost:3000"
+	}
+
+	// Ensure protocol is included
+	if !strings.HasPrefix(host, "http://") && !strings.HasPrefix(host, "https://") {
+		host = "http://" + host
+	}
+
+	resp.CustomShort = host + "/" + id
 
 	return c.Status(fiber.StatusOK).JSON(resp)
 }
