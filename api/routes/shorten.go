@@ -142,7 +142,5 @@ func ShortenURL(c *fiber.Ctx) error {
 
 	resp.CustomShort = host + "/" + id
 
-	resp.URL = host + "/" + id
-
 	return c.Status(fiber.StatusOK).JSON(resp)
 }

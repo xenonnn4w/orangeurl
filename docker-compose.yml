@@ -4,7 +4,8 @@ services:
   api:
     environment:
       - APP_PORT=:3000
-      - DOMAIN=http://localhost:3000
+      - PUBLIC_HOST=13.48.25.43:3000
+      - DOMAIN=http://13.48.25.43:3000
       - API_QUOTA=10
       - DB_ADDR=db:6379
       - DB_PASS=
