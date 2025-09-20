@@ -126,18 +126,15 @@ func ShortenURL(c *fiber.Ctx) error {
 	ttl, _ := r2.TTL(database.Ctx, c.IP()).Result()
 	resp.XRateLimitReset = ttl / time.Nanosecond / time.Minute
 
-	// Generate short URL using PUBLIC_HOST or fallback to DOMAIN
-	host := os.Getenv("PUBLIC_HOST")
+	// Generate short URL using Domain or fallback to PUBLIC_HOST
+	host := os.Getenv("DOMAIN")
 	if host == "" {
-		host = os.Getenv("DOMAIN")
-	}
-	if host == "" {
-		host = "localhost:3000"
+		host = os.Getenv("PUBLIC_HOST")
 	}
 
 	// Ensure protocol is included
 	if !strings.HasPrefix(host, "http://") && !strings.HasPrefix(host, "https://") {
-		host = "http://" + host
+		host = "https://" + host
 	}
 
 	resp.CustomShort = host + "/" + id
