@@ -1,19 +1,32 @@
 version: "7"
 
 services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - api
+    restart: unless-stopped
+
   api:
     environment:
       - APP_PORT=:3000
-      - PUBLIC_HOST=13.48.25.43:3000
-      - DOMAIN=http://13.48.25.43:3000
+      - PUBLIC_HOST=orangeurl.live
+      - DOMAIN=http://orangeurl.live
       - API_QUOTA=10
       - DB_ADDR=db:6379
       - DB_PASS=
     build: api
-    ports: 
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       - db
+    restart: unless-stopped
 
   db:
     build: db
@@ -21,3 +34,4 @@ services:
       - "6379:6379"
     volumes:
       - ./data:/data
+    restart: unless-stopped
